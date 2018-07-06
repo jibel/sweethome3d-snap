@@ -1,0 +1,8 @@
+#!/bin/sh
+CWD=$(dirname $(readlink -f $0))
+
+java -Xmx1024m -Djogamp.gluegen.UseTempJarCache=false \
+    -classpath ./SweetHome3D-5.7.jar \
+    -Djogamp.gluegen.UseTempJarCache=false \
+    -Dcom.eteks.sweethome3d.applicationId=SweetHome3D#Installer\
+    -jar $CWD/SweetHome3D-5.7.jar

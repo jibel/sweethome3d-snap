@@ -1,0 +1,48 @@
+name: sweethome3d-homedesign
+version: 1
+version-script: ls SweetHome3D*.tgz|sed 's/.*-\([^-]\+\)-linux-x64.tgz/\1/'|tr -s '_' '-'
+summary: An interior design application to draw house plans & arrange furniture
+description: |
+    Sweet Home 3D is a free interior design application that helps you place
+    your furniture on a house 2D plan, with a 3D preview.
+
+    Available at http://www.sweethome3d.com/, this program is aimed at people
+    who want to design their interior quickly, whether they are moving or they
+    just want to redesign their existing home. Numerous visual guides help you
+    draw the plan of your home and layout furniture. You may draw the walls of
+    your rooms upon the image of an existing plan, and then, drag and drop
+    furniture onto the plan from a catalog organized by categories. Each change
+    in the 2D plan is simultaneously updated in the 3D view, to show you a
+    realistic rendering of your layout.
+
+confinement: strict
+grade: stable
+icon: data/gui/sweethome3d-homedesign.png
+
+apps:
+  sweethome3d-homedesign:
+    command: desktop-launch $SNAP/sweethome3d/SweetHome3D-Java3D-1_5_2
+    plugs: 
+      - cups-control
+      - desktop
+      - desktop-legacy
+      - home
+      - network
+      - opengl
+      - x11
+    environment:
+      _JAVA_OPTIONS: -Duser.home=$SNAP_USER_DATA 
+
+parts:
+  sweethome3d-homedesign:
+    after: [desktop-gtk2]
+    plugin: jdk
+    source: .
+    override-build: |
+      mkdir -p  $SNAPCRAFT_PART_INSTALL/meta/gui
+      tar xzf SweetHome3D*.tgz -C $SNAPCRAFT_PART_INSTALL/
+      mv $SNAPCRAFT_PART_INSTALL/SweetHome3D-* $SNAPCRAFT_PART_INSTALL/sweethome3d
+      chmod +x $SNAPCRAFT_PART_INSTALL/sweethome3d/SweetHome3D
+      cp ./data/gui/* $SNAPCRAFT_PART_INSTALL/meta/gui/
+    build-packages:
+      - tar
