@@ -29,6 +29,7 @@ apps:
       - home
       - network
       - opengl
+      - removable-media
       - x11
     environment:
       _JAVA_OPTIONS: -Duser.home=$SNAP_USER_DATA 
