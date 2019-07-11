@@ -1,5 +1,6 @@
+base: core18
 name: sweethome3d-homedesign
-version: 1
+version: "1"
 version-script: ls SweetHome3D*.tgz|sed 's/.*-\([^-]\+\)-linux-x64.tgz/\1/'|tr -s '_' '-'
 summary: An interior design application to draw house plans & arrange furniture
 description: |
@@ -35,9 +36,39 @@ apps:
       _JAVA_OPTIONS: -Duser.home=$SNAP_USER_DATA 
 
 parts:
+  desktop-glib-only:
+    source: https://github.com/ubuntu/snapcraft-desktop-helpers.git
+    source-subdir: glib-only
+    plugin: make
+    build-packages:
+      - libglib2.0-dev
+    stage-packages:
+      - adwaita-icon-theme
+      - dmz-cursor-theme
+      - gnome-themes-standard
+      - libgdk-pixbuf2.0-0
+      - libglib2.0-bin
+      - libxkbcommon0
+      - light-themes
+      - locales-all
+      - shared-mime-info
+      - ttf-ubuntu-font-family
+      - xdg-user-dirs
+  jdk:
+    plugin: nil
+    stage-packages:
+        -  default-jre
+    filesets:
+        jdk-bits: [-usr/lib/jvm/default-java/bin,
+                   -usr/lib/jvm/default-java/include,
+                   -usr/lib/jvm/default-java/lib,
+                   -usr/share/doc]
+    stage:
+        - $jdk-bits
+
   sweethome3d-homedesign:
-    after: [desktop-gtk2]
-    plugin: jdk
+    after: [desktop-glib-only, jdk]
+    plugin: nil
     source: .
     override-build: |
       mkdir -p  $SNAPCRAFT_PART_INSTALL/meta/gui
@@ -45,5 +76,7 @@ parts:
       mv $SNAPCRAFT_PART_INSTALL/SweetHome3D-* $SNAPCRAFT_PART_INSTALL/sweethome3d
       chmod +x $SNAPCRAFT_PART_INSTALL/sweethome3d/SweetHome3D
       cp ./data/gui/* $SNAPCRAFT_PART_INSTALL/meta/gui/
+    stage-packages:
+      - locales
     build-packages:
       - tar
