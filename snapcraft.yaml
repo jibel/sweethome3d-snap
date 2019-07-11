@@ -54,20 +54,8 @@ parts:
       - shared-mime-info
       - ttf-ubuntu-font-family
       - xdg-user-dirs
-  jdk:
-    plugin: nil
-    stage-packages:
-        -  default-jre
-    filesets:
-        jdk-bits: [-usr/lib/jvm/default-java/bin,
-                   -usr/lib/jvm/default-java/include,
-                   -usr/lib/jvm/default-java/lib,
-                   -usr/share/doc]
-    stage:
-        - $jdk-bits
-
   sweethome3d-homedesign:
-    after: [desktop-glib-only, jdk]
+    after: [desktop-glib-only]
     plugin: nil
     source: .
     override-build: |
@@ -77,6 +65,23 @@ parts:
       chmod +x $SNAPCRAFT_PART_INSTALL/sweethome3d/SweetHome3D
       cp ./data/gui/* $SNAPCRAFT_PART_INSTALL/meta/gui/
     stage-packages:
-      - locales
+        # Dependencies of jre8 bundled with sh3d
+        - libasound2
+        - libcups2
+        - libfontconfig1
+        - libfreetype6
+        - libgif7
+        - libgl1
+        - libjpeg8
+        - liblcms2-2
+        - libnss3
+        - libpcsclite1
+        - libpng16-16
+        - libx11-6
+        - libxext6
+        - libxi6
+        - libxrender1
+        - libxtst6
+        - util-linux
     build-packages:
       - tar
