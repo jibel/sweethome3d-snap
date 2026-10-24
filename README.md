@@ -8,10 +8,6 @@ develop or maintain the interior design application itself.
 
 ## For users
 
-The Snap runs the application on a jlink-trimmed OpenJDK 25 runtime built
-into the Snap; the Java runtime bundled in the upstream tarball is removed
-at build time.
-
 For installation and general Sweet Home 3D usage, see the
 [upstream project site](https://www.sweethome3d.com/).
 
@@ -68,9 +64,28 @@ sudo snap install --dangerous ./sweethome3d-content_<version>_amd64.snap
 ```
 
 The library files are committed to this repository, so no download is needed.
-When both snaps are installed the libraries appear automatically in Sweet
-Home 3D's furniture and texture catalogs; without the content snap the
-application behaves exactly as before.
+
+How the connection is established depends on where the snaps come from:
+
+- **From the Store**: `sweethome3d-content` is declared as the default
+  provider of the application snap's content plugs, so snapd installs
+  it and connects both interfaces automatically. No manual step is
+  needed.
+- **Local builds** (installed with `--dangerous`): the default-provider
+  mechanism does not apply, so connect the two content interfaces
+  manually after installing both snaps:
+
+  ```sh
+  sudo snap connect sweethome3d-homedesign:sweethome3d-furniture \
+      sweethome3d-content:furniture
+  sudo snap connect sweethome3d-homedesign:sweethome3d-textures \
+      sweethome3d-content:textures
+  ```
+
+Verify the connections with `snap connections sweethome3d-homedesign`,
+then restart Sweet Home 3D: the extra libraries appear in its furniture
+and texture catalogs. Without the content snap the application behaves
+exactly as before.
 
 ## Licensing and attribution
 
@@ -91,6 +106,3 @@ License has no SPDX identifier, so the content snap's `license` field lists
 only the SPDX-identifiable licenses (GPL-2.0, CC-BY-3.0, CC-BY-4.0); the
 FAL text is provided verbatim in `licenses/`.
 
-## Known Issues
-
-Printing from a java app is not working and printing is disabled.
