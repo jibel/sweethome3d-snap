@@ -20,7 +20,10 @@ grade: stable
 icon: data/gui/sweethome3d-homedesign.png
 title: Sweet Home 3D
 contact: https://github.com/jibel/sweethome3d-snap/issues
-issues: https://github.com/jibel/sweethome3d-snap/issues
+issues:
+  - https://github.com/jibel/sweethome3d-snap/issues
+  # Application behavior issues (plan drawing, 3D view, features) go upstream
+  - http://www.sweethome3d.com/support.jsp
 source-code: https://github.com/jibel/sweethome3d-snap
 website: https://www.sweethome3d.com/
 license: GPL-2.0-with-classpath-exception
