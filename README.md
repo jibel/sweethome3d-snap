@@ -53,6 +53,44 @@ The generated `.snap` can be installed locally for a trial with
 If multiple tarballs are present, the build selects the highest version. It
 sets the Snap version from the selected archive name.
 
+## Optional content snap: extra furniture and texture libraries
+
+The `content-snap/` directory builds `sweethome3d-content`, a companion snap
+that ships three official furniture libraries (3DModels-Contributions,
+3DModels-BlendSwap-CC-0, 3DModels-BlendSwap-CC-BY, all version 1.9.3) and two
+official texture libraries (Textures-Contributions, Textures-eTeksScopia,
+version 1.3.1). Build and install it from that directory:
+
+```sh
+cd content-snap
+snapcraft pack
+sudo snap install --dangerous ./sweethome3d-content_<version>_amd64.snap
+```
+
+The library files are committed to this repository, so no download is needed.
+When both snaps are installed the libraries appear automatically in Sweet
+Home 3D's furniture and texture catalogs; without the content snap the
+application behaves exactly as before.
+
+## Licensing and attribution
+
+The libraries carry mixed licenses and each library's full license text is
+included in `content-snap/licenses/`:
+
+- 3DModels-Contributions: Free Art License 1.3
+- 3DModels-BlendSwap-CC-0: CC0 / Public Domain
+- 3DModels-BlendSwap-CC-BY: Creative Commons Attribution 3.0
+- Textures-Contributions: Creative Commons Attribution 4.0 International
+- Textures-eTeksScopia: Creative Commons Attribution 4.0 International
+
+Per-model attribution is also embedded inside each SH3F/SH3T file and is
+shown by Sweet Home 3D in the catalogs. To satisfy the CC-BY attribution
+requirement, keep the license files intact when redistributing; the
+`sweethome3d-content.info` command prints the license summary. The Free Art
+License has no SPDX identifier, so the content snap's `license` field lists
+only the SPDX-identifiable licenses (GPL-2.0, CC-BY-3.0, CC-BY-4.0); the
+FAL text is provided verbatim in `licenses/`.
+
 ## Known Issues
 
 Printing from a java app is not working and printing is disabled.

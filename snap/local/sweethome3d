@@ -9,7 +9,17 @@ if [ ! -x "$JAVA_HOME/bin/java" ]; then
     exit 1
 fi
 
+# Optional content snap with extra furniture/texture libraries. Build the
+# applicationFolders property from the mounted content directories; when
+# the content snap is not installed the folders are absent and the app
+# falls back to its default catalogs only.
+JAVA_ARGS=""
+if [ -d "$SNAP/content/furniture" ] || [ -d "$SNAP/content/textures" ]; then
+    JAVA_ARGS="-Dcom.eteks.sweethome3d.applicationFolders=$SNAP/content"
+fi
+
 exec "$JAVA_HOME/bin/java" -Xmx2g \
+    $JAVA_ARGS \
     --add-opens java.desktop/sun.awt=ALL-UNNAMED \
     --add-opens java.desktop/sun.java2d=ALL-UNNAMED \
     --add-opens java.base/java.lang=ALL-UNNAMED \

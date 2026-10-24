@@ -44,8 +44,25 @@ apps:
       - home
       - network
       - removable-media
+      - sweethome3d-furniture
+      - sweethome3d-textures
     environment:
       _JAVA_OPTIONS: "-Duser.home=$SNAP_USER_DATA"
+
+# Extra library content from an optional content snap. The launcher points
+# the application at the mounted content folders; when the content snap is
+# not installed the folders simply do not exist and the app runs as usual.
+plugs:
+  sweethome3d-furniture:
+    interface: content
+    content: sweethome3d-furniture
+    target: $SNAP/content/furniture
+    default-provider: sweethome3d-content
+  sweethome3d-textures:
+    interface: content
+    content: sweethome3d-textures
+    target: $SNAP/content/textures
+    default-provider: sweethome3d-content
 
 parts:
   sweethome3d-homedesign:

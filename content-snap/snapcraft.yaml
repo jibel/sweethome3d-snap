@@ -1,0 +1,61 @@
+name: sweethome3d-content
+base: core26
+version: "1.9.3"
+summary: Furniture and texture libraries for Sweet Home 3D
+description: |
+    Additional 3D models and textures for Sweet Home 3D, distributed as
+    SH3F (furniture) and SH3T (textures) library files from the official
+    upstream collections.
+
+    Included libraries:
+      - 3DModels-Contributions 1.9.3 (Free Art License 1.3)
+      - 3DModels-BlendSwap-CC-0 1.9.3 (CC0 / Public Domain)
+      - 3DModels-BlendSwap-CC-BY 1.9.3 (CC-BY 3.0)
+      - Textures-Contributions 1.3.1 (CC-BY 4.0)
+      - Textures-eTeksScopia 1.3.1 (CC-BY 4.0)
+
+    Install alongside the sweethome3d-homedesign snap to make these
+    libraries available to the application. The license texts of every
+    library are shipped in the licenses/ directory and can be read with
+    `sweethome3d-content.info`.
+
+    This snap is a redistribution of official libraries downloaded from
+    https://sourceforge.net/projects/sweethome3d/files/. Sweet Home 3D
+    is (c) Space Mushrooms and distributed under the GNU GPL.
+
+title: Sweet Home 3D Content Libraries
+license: GPL-2.0 AND CC-BY-3.0 AND CC-BY-4.0
+contact: https://github.com/jibel/sweethome3d-snap/issues
+issues: https://github.com/jibel/sweethome3d-snap/issues
+source-code: https://github.com/jibel/sweethome3d-snap
+website: https://www.sweethome3d.com/
+
+confinement: strict
+grade: stable
+
+# Content-provider slots: when this snap is installed, snapd exposes the
+# library directories through these content interfaces.
+slots:
+  furniture:
+    interface: content
+    content: sweethome3d-furniture
+    read: [$SNAP/furniture]
+  textures:
+    interface: content
+    content: sweethome3d-textures
+    read: [$SNAP/textures]
+
+apps:
+  info:
+    command: bin/info
+
+parts:
+  libraries:
+    plugin: dump
+    source: .
+    override-build: |
+      set -eu
+      chmod 755 "$SNAPCRAFT_PART_BUILD/snap/local/info"
+      craftctl default
+      install -D -m 755 "$SNAPCRAFT_PART_BUILD/snap/local/info" \
+        "$SNAPCRAFT_PART_INSTALL/bin/info"
