@@ -1,13 +1,11 @@
 #!/bin/sh
-# Launcher for Sweet Home 3D running on the OpenJDK staged in the snap
-# (the tarball's bundled Java 8 runtime is deliberately removed).
+# Launcher for Sweet Home 3D running on the jlink-trimmed OpenJDK runtime
+# built into the snap (the tarball's bundled Java 8 runtime is removed).
 
 APP_DIR="$SNAP/sweethome3d"
-
-# Locate the newest OpenJDK runtime staged into $SNAP
-JAVA_HOME="$(ls -d "$SNAP"/usr/lib/jvm/java-*-openjdk* 2>/dev/null | sort -V | tail -n1)"
-if [ -z "$JAVA_HOME" ]; then
-    echo "ERROR: no OpenJDK runtime found in $SNAP/usr/lib/jvm" >&2
+JAVA_HOME="$SNAP/jre"
+if [ ! -x "$JAVA_HOME/bin/java" ]; then
+    echo "ERROR: no Java runtime found at $JAVA_HOME" >&2
     exit 1
 fi
 

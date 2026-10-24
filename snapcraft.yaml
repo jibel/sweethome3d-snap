@@ -62,5 +62,23 @@ parts:
       install -m 755 snap/local/sweethome3d "$SNAPCRAFT_PART_INSTALL/bin/sweethome3d"
       cp ./data/gui/* "$SNAPCRAFT_PART_INSTALL/meta/gui/"
     stage-packages:
-      - default-jre
       - fonts-ubuntu
+  jre:
+    plugin: nil
+    build-packages:
+      - openjdk-25-jdk-headless
+    override-build: |
+      set -eu
+      JDK="$(ls -d /usr/lib/jvm/java-25-openjdk*-amd64 2>/dev/null | sort -V | tail -n1)"
+      if [ -z "$JDK" ]; then
+        echo "ERROR: no OpenJDK 25 JDK found for jlink" >&2
+        exit 1
+      fi
+      # Minimal runtime for Sweet Home 3D: jdeps on the application jars gives
+      # java.base,java.desktop,java.logging,java.prefs; the rest cover
+      # reflection/service-loader uses in bundled libraries (JMF, iText,
+      # sunflow, Java3D/JOGL).
+      "$JDK/bin/jlink" \
+        --add-modules java.base,java.desktop,java.logging,java.prefs,java.xml,java.sql,java.naming,java.management,jdk.unsupported,jdk.crypto.ec \
+        --strip-debug --no-header-files --no-man-pages --compress zip-6 \
+        --output "$SNAPCRAFT_PART_INSTALL/jre"

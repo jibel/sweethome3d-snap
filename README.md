@@ -8,8 +8,9 @@ develop or maintain the interior design application itself.
 
 ## For users
 
-The Snap runs the application on the OpenJDK JRE staged into the Snap; the
-Java runtime bundled in the upstream tarball is removed at build time.
+The Snap runs the application on a jlink-trimmed OpenJDK 25 runtime built
+into the Snap; the Java runtime bundled in the upstream tarball is removed
+at build time.
 
 For installation and general Sweet Home 3D usage, see the
 [upstream project site](https://www.sweethome3d.com/).
