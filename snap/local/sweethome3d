@@ -1,0 +1,23 @@
+#!/bin/sh
+# Launcher for Sweet Home 3D running on the OpenJDK staged in the snap
+# (the tarball's bundled Java 8 runtime is deliberately removed).
+
+APP_DIR="$SNAP/sweethome3d"
+
+# Locate the newest OpenJDK runtime staged into $SNAP
+JAVA_HOME="$(ls -d "$SNAP"/usr/lib/jvm/java-*-openjdk* 2>/dev/null | sort -V | tail -n1)"
+if [ -z "$JAVA_HOME" ]; then
+    echo "ERROR: no OpenJDK runtime found in $SNAP/usr/lib/jvm" >&2
+    exit 1
+fi
+
+exec "$JAVA_HOME/bin/java" -Xmx2g \
+    --add-opens java.desktop/sun.awt=ALL-UNNAMED \
+    --add-opens java.desktop/sun.java2d=ALL-UNNAMED \
+    --add-opens java.base/java.lang=ALL-UNNAMED \
+    --enable-native-access=ALL-UNNAMED \
+    -classpath "$APP_DIR/lib/SweetHome3D.jar:$APP_DIR/lib/Furniture.jar:$APP_DIR/lib/Textures.jar:$APP_DIR/lib/Examples.jar:$APP_DIR/lib/Help.jar:$APP_DIR/lib/batik-svgpathparser-1.7.jar:$APP_DIR/lib/jeksparser-calculator.jar:$APP_DIR/lib/iText-2.1.7.jar:$APP_DIR/lib/freehep-vectorgraphics-svg-2.1.1c.jar:$APP_DIR/lib/sunflow-0.07.3i.jar:$APP_DIR/lib/jmf.jar:$APP_DIR/lib/java3d-1.6/j3dcore.jar:$APP_DIR/lib/java3d-1.6/j3dutils.jar:$APP_DIR/lib/java3d-1.6/vecmath.jar:$APP_DIR/lib/java3d-1.6/gluegen-rt.jar:$APP_DIR/lib/java3d-1.6/jogl-java3d.jar:$APP_DIR/lib/jnlp.jar" \
+    -Djava.library.path="$APP_DIR/lib/java3d-1.6:$APP_DIR/lib/yafaray" \
+    -Djogamp.gluegen.UseTempJarCache=false \
+    -Dcom.eteks.sweethome3d.applicationId=SweetHome3D#Installer \
+    com.eteks.sweethome3d.SweetHome3D -open "$1"

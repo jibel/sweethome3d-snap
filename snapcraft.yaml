@@ -1,7 +1,6 @@
-base: core18
 name: sweethome3d-homedesign
-version: "1"
-version-script: ls SweetHome3D*.tgz|sed 's/.*-\([^-]\+\)-linux-x64.tgz/\1/'|tr -s '_' '-'
+base: core26
+adopt-info: sweethome3d-homedesign
 summary: An interior design application to draw house plans & arrange furniture
 description: |
     Sweet Home 3D is a free interior design application that helps you place
@@ -22,66 +21,46 @@ icon: data/gui/sweethome3d-homedesign.png
 
 apps:
   sweethome3d-homedesign:
-    command: desktop-launch $SNAP/sweethome3d/SweetHome3D-Java3D-1_5_2
-    plugs: 
+    command: bin/sweethome3d
+    extensions: [gnome]
+    plugs:
       - cups-control
-      - desktop
-      - desktop-legacy
       - home
       - network
-      - opengl
       - removable-media
-      - x11
     environment:
-      _JAVA_OPTIONS: -Duser.home=$SNAP_USER_DATA 
+      _JAVA_OPTIONS: "-Duser.home=$SNAP_USER_DATA"
 
 parts:
-  desktop-glib-only:
-    source: https://github.com/ubuntu/snapcraft-desktop-helpers.git
-    source-subdir: glib-only
-    plugin: make
-    build-packages:
-      - libglib2.0-dev
-    stage-packages:
-      - adwaita-icon-theme
-      - dmz-cursor-theme
-      - gnome-themes-standard
-      - libgdk-pixbuf2.0-0
-      - libglib2.0-bin
-      - libxkbcommon0
-      - light-themes
-      - locales-all
-      - shared-mime-info
-      - ttf-ubuntu-font-family
-      - xdg-user-dirs
   sweethome3d-homedesign:
-    after: [desktop-glib-only]
     plugin: nil
     source: .
     override-build: |
-      mkdir -p  $SNAPCRAFT_PART_INSTALL/meta/gui
-      tar xzf SweetHome3D*.tgz -C $SNAPCRAFT_PART_INSTALL/
-      mv $SNAPCRAFT_PART_INSTALL/SweetHome3D-* $SNAPCRAFT_PART_INSTALL/sweethome3d
-      chmod +x $SNAPCRAFT_PART_INSTALL/sweethome3d/SweetHome3D
-      cp ./data/gui/* $SNAPCRAFT_PART_INSTALL/meta/gui/
+      set -eu
+      # Pick the highest-versioned tarball, whether it sits next to
+      # snapcraft.yaml or in the download/ directory.
+      TARBALL="$(find . download -maxdepth 2 -name 'SweetHome3D-*.tgz' 2>/dev/null | sort -V | tail -n1)"
+      if [ -z "$TARBALL" ]; then
+        echo "ERROR: no SweetHome3D-*.tgz found (see README for how to download it)" >&2
+        exit 1
+      fi
+      echo "Building from tarball: $TARBALL"
+
+      VERSION="${TARBALL##*/SweetHome3D-}"
+      VERSION="${VERSION%%-linux-*}"
+      VERSION="$(echo "$VERSION" | tr '_' '-')"
+      craftctl set version="$VERSION"
+
+      mkdir -p "$SNAPCRAFT_PART_INSTALL/meta/gui" "$SNAPCRAFT_PART_INSTALL/bin"
+      tar xzf "$TARBALL" -C "$SNAPCRAFT_PART_INSTALL/"
+      mv "$SNAPCRAFT_PART_INSTALL"/SweetHome3D-* "$SNAPCRAFT_PART_INSTALL/sweethome3d"
+
+      # The tarball bundles a Java 8 runtime (~112 MB); we run the app on the
+      # system OpenJDK instead, so drop it.
+      rm -rf "$SNAPCRAFT_PART_INSTALL/sweethome3d/runtime"
+
+      install -m 755 snap/local/sweethome3d "$SNAPCRAFT_PART_INSTALL/bin/sweethome3d"
+      cp ./data/gui/* "$SNAPCRAFT_PART_INSTALL/meta/gui/"
     stage-packages:
-        # Dependencies of jre8 bundled with sh3d
-        - libasound2
-        - libcups2
-        - libfontconfig1
-        - libfreetype6
-        - libgif7
-        - libgl1
-        - libjpeg8
-        - liblcms2-2
-        - libnss3
-        - libpcsclite1
-        - libpng16-16
-        - libx11-6
-        - libxext6
-        - libxi6
-        - libxrender1
-        - libxtst6
-        - util-linux
-    build-packages:
-      - tar
+      - default-jre
+      - fonts-ubuntu
