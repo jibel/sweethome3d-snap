@@ -1,4 +1,4 @@
-name: sweethome3d-content
+name: sweethome3d-libraries
 base: core26
 version: "1.9.3"
 summary: Furniture and texture libraries for Sweet Home 3D
@@ -17,7 +17,7 @@ description: |
     Install alongside the sweethome3d-homedesign snap to make these
     libraries available to the application. The license texts of every
     library are shipped in the licenses/ directory and can be read with
-    `sweethome3d-content.info`.
+    `sweethome3d-libraries.info`.
 
     This snap is a redistribution of official libraries downloaded from
     https://sourceforge.net/projects/sweethome3d/files/. Sweet Home 3D

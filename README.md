@@ -51,7 +51,7 @@ sets the Snap version from the selected archive name.
 
 ## Optional content snap: extra furniture and texture libraries
 
-The `content-snap/` directory builds `sweethome3d-content`, a companion snap
+The `content-snap/` directory builds `sweethome3d-libraries`, a companion snap
 that ships three official furniture libraries (3DModels-Contributions,
 3DModels-LucaPresidente, 3DModels-Scopia, all version 1.9.3) and two
 official texture libraries (Textures-Contributions, Textures-eTeksScopia,
@@ -60,7 +60,7 @@ version 1.3.1). Build and install it from that directory:
 ```sh
 cd content-snap
 snapcraft pack
-sudo snap install --dangerous ./sweethome3d-content_<version>_amd64.snap
+sudo snap install --dangerous ./sweethome3d-libraries_<version>_amd64.snap
 ```
 
 The library files are not committed to the repository. At build time,
@@ -76,7 +76,7 @@ extracted files.
 
 How the connection is established depends on where the snaps come from:
 
-- **From the Store**: `sweethome3d-content` is declared as the default
+- **From the Store**: `sweethome3d-libraries` is declared as the default
   provider of the application snap's content plugs, so snapd installs
   it and connects both interfaces automatically. No manual step is
   needed.
@@ -86,9 +86,9 @@ How the connection is established depends on where the snaps come from:
 
   ```sh
   sudo snap connect sweethome3d-homedesign:sweethome3d-furniture \
-      sweethome3d-content:furniture
+      sweethome3d-libraries:furniture
   sudo snap connect sweethome3d-homedesign:sweethome3d-textures \
-      sweethome3d-content:textures
+      sweethome3d-libraries:textures
   ```
 
 Verify the connections with `snap connections sweethome3d-homedesign`,
@@ -110,7 +110,7 @@ included in `content-snap/licenses/`:
 Per-model attribution is also embedded inside each SH3F/SH3T file and is
 shown by Sweet Home 3D in the catalogs. To satisfy the CC-BY attribution
 requirement, keep the license files intact when redistributing; the
-`sweethome3d-content.info` command prints the license summary. The Free Art
+`sweethome3d-libraries.info` command prints the license summary. The Free Art
 License has no SPDX identifier, so the content snap's `license` field lists
 only the SPDX-identifiable licenses (GPL-2.0, CC-BY-3.0, CC-BY-4.0); the
 FAL text is provided verbatim in `licenses/`.

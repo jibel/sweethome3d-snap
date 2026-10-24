@@ -57,12 +57,12 @@ plugs:
     interface: content
     content: sweethome3d-furniture
     target: $SNAP/content/furniture
-    default-provider: sweethome3d-content
+    default-provider: sweethome3d-libraries
   sweethome3d-textures:
     interface: content
     content: sweethome3d-textures
     target: $SNAP/content/textures
-    default-provider: sweethome3d-content
+    default-provider: sweethome3d-libraries
 
 parts:
   sweethome3d-homedesign:
