@@ -57,7 +57,7 @@ sets the Snap version from the selected archive name.
 
 The `content-snap/` directory builds `sweethome3d-content`, a companion snap
 that ships three official furniture libraries (3DModels-Contributions,
-3DModels-BlendSwap-CC-0, 3DModels-BlendSwap-CC-BY, all version 1.9.3) and two
+3DModels-LucaPresidente, 3DModels-Scopia, all version 1.9.3) and two
 official texture libraries (Textures-Contributions, Textures-eTeksScopia,
 version 1.3.1). Build and install it from that directory:
 
@@ -78,8 +78,8 @@ The libraries carry mixed licenses and each library's full license text is
 included in `content-snap/licenses/`:
 
 - 3DModels-Contributions: Free Art License 1.3
-- 3DModels-BlendSwap-CC-0: CC0 / Public Domain
-- 3DModels-BlendSwap-CC-BY: Creative Commons Attribution 3.0
+- 3DModels-LucaPresidente: Free Art License 1.3
+- 3DModels-Scopia: Creative Commons Attribution 3.0
 - Textures-Contributions: Creative Commons Attribution 4.0 International
 - Textures-eTeksScopia: Creative Commons Attribution 4.0 International
 
