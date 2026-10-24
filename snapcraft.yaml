@@ -18,6 +18,19 @@ description: |
 confinement: strict
 grade: stable
 icon: data/gui/sweethome3d-homedesign.png
+title: Sweet Home 3D
+contact: https://github.com/jibel/sweethome3d-snap/issues
+issues: https://github.com/jibel/sweethome3d-snap/issues
+source-code: https://github.com/jibel/sweethome3d-snap
+website: https://www.sweethome3d.com/
+license: GPL-2.0-with-classpath-exception
+
+# The JVM loads its own native libraries via System.loadLibrary / dlopen at
+# runtime; static analysis cannot see this usage, so silence the linter for
+# the JRE tree.
+lint:
+  ignore:
+    - unused-library: [jre/lib/**]
 
 apps:
   sweethome3d-homedesign:
@@ -67,6 +80,7 @@ parts:
     plugin: nil
     build-packages:
       - openjdk-25-jdk-headless
+      - libgif7
     override-build: |
       set -eu
       JDK="$(ls -d /usr/lib/jvm/java-25-openjdk*-amd64 2>/dev/null | sort -V | tail -n1)"
@@ -82,3 +96,9 @@ parts:
         --add-modules java.base,java.desktop,java.logging,java.prefs,java.xml,java.sql,java.naming,java.management,jdk.unsupported,jdk.crypto.ec \
         --strip-debug --no-header-files --no-man-pages --compress zip-6 \
         --output "$SNAPCRAFT_PART_INSTALL/jre"
+    stage-packages:
+      # Native dependencies of the JDK libraries included in the jlink image
+      # (libgif7 is needed by libsplashscreen.so, the rest by AWT/2D and JSound)
+      - libgif7
+      - libjpeg8
+      - liblcms2-2
