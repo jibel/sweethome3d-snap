@@ -1,0 +1,10 @@
+# Fetched build inputs and local build artifacts. Never commit these.
+download/
+parts/
+stage/
+prime/
+*.snap
+
+# Library files extracted at build time by content-snap/snapcraft.yaml
+content-snap/furniture/*.sh3f
+content-snap/textures/*.sh3t

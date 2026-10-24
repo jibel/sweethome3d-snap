@@ -63,7 +63,16 @@ snapcraft pack
 sudo snap install --dangerous ./sweethome3d-content_<version>_amd64.snap
 ```
 
-The library files are committed to this repository, so no download is needed.
+The library files are not committed to the repository. At build time,
+Snapcraft downloads the official library archives from the upstream
+[SourceForge project](https://sourceforge.net/projects/sweethome3d/files/),
+verifies them against pinned SHA-256 checksums, and extracts the library
+files into place. Already-extracted files in `content-snap/furniture/`
+and `content-snap/textures/` are reused on later builds, as are local
+copies of the upstream archives placed in `download/contrib/` or
+`content-snap/download/` (if their checksums match). A network
+connection is only needed for a first build or after deleting the
+extracted files.
 
 How the connection is established depends on where the snaps come from:
 
